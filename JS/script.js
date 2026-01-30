@@ -98,6 +98,10 @@ function addBlock(type) {
             ['', '', '']  // Primera fila de datos
         ];
     }
+
+    if (type === 'subtitle') {
+        newBlock.headingLevel = "h2";
+    }
     
     reportData.push(newBlock);
     render();
@@ -432,14 +436,36 @@ function renderTitleEditor(block, deleteBtn) {
 }
 
 /**
+ * Actualiza el nivel del subtítulo
+ */
+function updateSubtitleLevel(blockId, level) {
+    console.log("Updating subtitle level:", blockId, level);
+    const block = reportData.find(b => b.id === blockId);
+    if (block) {
+        block.headingLevel = level;
+        renderEditor();
+        renderPreview();
+    }
+}
+
+/**
  * Renderiza el editor de subtítulo (AHORA SEGURO)
  */
 function renderSubtitleEditor(block, deleteBtn) {
+    console.log("Rendering subtitle editor for block:", block);
     return `
         <div class="block-card subtitle-card">
             ${deleteBtn}
             <label>Subtítulo:</label>
-            <input type="text" class="editor-input" value="${escapeAttr(block.content)}" placeholder="Ej. Introducción o Metodología" oninput="updateContent(${block.id}, this.value)">
+            <div>
+                <input type="text" class="editor-input" value="${escapeAttr(block.content)}" placeholder="Ej. Introducción o Metodología" oninput="updateContent(${block.id}, this.value)">
+                <select onchange="updateSubtitleLevel(${block.id}, this.value)" style="padding: 8px; border-radius: 5px; border: 1px solid #ddd">
+                    <option value="h2" ${block.headingLevel === 'h2' ? 'selected' : ''}>H2</option>
+                    <option value="h3" ${block.headingLevel === 'h3' ? 'selected' : ''}>H3</option>
+                    <option value="h4" ${block.headingLevel === 'h4' ? 'selected' : ''}>H4</option>
+                    <option value="h5" ${block.headingLevel === 'h5' ? 'selected' : ''}>H5</option>
+                </select>
+            </div>
         </div>`;
 }
 
@@ -641,7 +667,7 @@ function renderPreview() {
                 return `<h1 class="p-title">${escapeHtml(block.content)}</h1>`;
             
             case 'subtitle':
-                return `<h2 class="p-subtitle">${escapeHtml(block.content)}</h2>`;
+                return `<${block.headingLevel} class="p-subtitle ${block.headingLevel}">${escapeHtml(block.content)}</${block.headingLevel}>`;
             
             case 'text':
                 return `<p class="p-text">${escapeHtml(block.content)}</p>`;

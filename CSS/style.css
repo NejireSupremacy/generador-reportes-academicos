@@ -497,8 +497,13 @@ textarea.editor-input {
     line-height: 1.2;
 }
 
+/* Subtítulos con diferentes niveles */
+.p-subtitle.h2 { font-size: 1.6em; }
+.p-subtitle.h3 { font-size: 1.3em; }
+.p-subtitle.h4 { font-size: 1.1em; }
+.p-subtitle.h5 { font-size: 1.05em; }
+
 .p-subtitle { 
-    font-size: 1.6em; 
     border-bottom: 2px solid var(--secondary);
     margin-top: 30px; 
     color: var(--primary);
