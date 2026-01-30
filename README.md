@@ -16,6 +16,17 @@
 
 ---
 
+## Planes a Corto Plazo:
+- [x] Implemnetar niveles de subtítulos (h2, h3, h4, h5).
+- [ ] Implementar sistema de arrastrar y soltar bloques/reordenamiento.
+- [ ] Mejorar el sistema de exportación en texto. Posiblemente reemplazando el formato actual por Markdown.
+- [ ] Implementar una función de "Importar" y "Exportar" el reporte completo. Posiblemente usando XML o Markdown.
+
+## Errores Conocidos:
+- [ ] El bloque de párrafo no parece permitir los saltos de línea.
+
+---
+
 ## Descripción
 
 Aplicación web 100% cliente para generar documentos académicos profesionales con múltiples tipos de bloques: encabezados, títulos, párrafos, código, imágenes, **tablas**, referencias IEEE y **declaración de uso de IA**.
@@ -323,20 +334,6 @@ Este proyecto está bajo la Licencia MIT. Ver [LICENSE](LICENSE) para más detal
 ![GitHub stars](https://img.shields.io/github/stars/JorgeTSW/generador-reportes-academicos?style=social)
 ![GitHub forks](https://img.shields.io/github/forks/JorgeTSW/generador-reportes-academicos?style=social)
 ![GitHub issues](https://img.shields.io/github/issues/JorgeTSW/generador-reportes-academicos)
-
----
-
-## Roadmap
-
-### Versión 1.1 (Próximamente)
-- [ ] Más temas institucionales
-- [ ] Plantillas predefinidas
-- [ ] Modo oscuro
-
-### Versión 2.0 (Futuro)
-- [ ] Editor colaborativo
-- [ ] Cargar archivos
-- [ ] Integración con Google Drive
 
 ---
 
