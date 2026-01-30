@@ -796,66 +796,80 @@ function renderPreview() {
  * Exporta el reporte como archivo de texto plano
  */
 function exportTXT() {
-    let textContent = "";
+    let textContent = [];
     let figureCount = 0;
-    let tableCount = 0;  // Contador de tablas
+    let tableCount = 0;
     let refCount = 0;
 
-    textContent += "=".repeat(60) + "\n";
-    textContent += "REPORTE ACADÉMICO - EXPORTACIÓN TXT\n";
-    textContent += "=".repeat(60) + "\n\n";
+    const SEP_MAIN = '='.repeat(60);
+    const SEP_SUB = '-'.repeat(40);
+
+    textContent.push(SEP_MAIN);
+    textContent.push("REPORTE ACADÉMICO - EXPORTACIÓN TXT");
+    textContent.push(SEP_MAIN);
+    textContent.push('')
 
     reportData.forEach(block => {
         switch(block.type) {
             case 'header':
                 if (block.hData) {
                     const d = block.hData;
-                    textContent += `DATOS DEL ESTUDIANTE\n`;
-                    textContent += `-`.repeat(40) + "\n";
-                    textContent += `Institución: ${d.inst}\n`;
-                    textContent += `Materia: ${d.subject} (${d.term}° Cuatrimestre)\n`;
-                    textContent += `Profesor: ${d.prof}\n`;
-                    textContent += `Alumno: ${d.name} | Grupo: ${d.group}\n`;
-                    textContent += `Fecha: ${d.date}\n`;
-                    textContent += `\n`;
+                    textContent.push(`DATOS DEL ESTUDIANTE`);
+                    textContent.push(SEP_SUB);
+                    textContent.push(`Institución: ${d.inst}`);
+                    textContent.push(`Materia: ${d.subject} (${d.term}° Cuatrimestre)`);
+                    textContent.push(`Profesor: ${d.prof}`);
+                    textContent.push(`Alumno: ${d.name} | Grupo: ${d.group}`);
+                    textContent.push(`Fecha: ${d.date}`);
+                    textContent.push('');
                 }
                 break;
             
             case 'title':
-                textContent += `\n${"=".repeat(60)}\n`;
-                textContent += `${block.content.toUpperCase()}\n`;
-                textContent += `${"=".repeat(60)}\n\n`;
+                textContent.push('');
+                textContent.push(SEP_MAIN);
+                textContent.push(block.content.toUpperCase());
+                textContent.push(SEP_MAIN);
+                textContent.push('');
                 break;
             
             case 'subtitle':
-                textContent += `\n${"-".repeat(40)}\n`;
-                textContent += `${block.content}\n`;
-                textContent += `${"-".repeat(40)}\n\n`;
+                textContent.push('');
+                textContent.push(SEP_SUB);
+                textContent.push(block.content);
+                textContent.push(SEP_SUB);
+                textContent.push('');
                 break;
             
             case 'text':
-                textContent += `${block.content}\n\n`;
+                textContent.push(block.content);
+                textContent.push('');
                 break;
             
             case 'code':
-                textContent += `\n[INICIO DE CÓDIGO]\n`;
-                textContent += `${"-".repeat(40)}\n`;
-                textContent += `${block.content}\n`;
-                textContent += `${"-".repeat(40)}\n`;
-                textContent += `[FIN DE CÓDIGO]\n\n`;
+                textContent.push('');
+                textContent.push(`[INICIO DE CÓDIGO]`);
+                textContent.push(SEP_SUB);
+                textContent.push(block.content);
+                textContent.push(SEP_SUB);
+                textContent.push('[FIN DE CÓDIGO]');
+                textContent.push('');
                 break;
             
             case 'image':
                 figureCount++;
-                textContent += `\n[FIGURA ${figureCount}]\n`;
-                textContent += `Descripción: ${block.caption || 'Sin descripción'}\n`;
-                textContent += `(La imagen no puede ser exportada a formato TXT)\n\n`;
+                textContent.push('');
+                textContent.push(`[FIGURA ${figureCount}]`);
+                textContent.push(`Descripción: ${block.caption || 'Sin descripción'}`);
+                textContent.push('(La imagen no puede ser exportada a formato TXT)');
+                textContent.push('');
                 break;
             
             case 'table':
                 tableCount++;
-                textContent += `\n[TABLA ${tableCount}]\n`;
-                textContent += `${"-".repeat(60)}\n`;
+                textContent.push('');
+                textContent.push(`[TABLA ${tableCount}]`);
+                textContent.push(SEP_MAIN);
                 
 				if (block.tableData && block.tableData.length > 0) {
                     const cols = block.columns || block.tableData[0].length;
@@ -919,24 +933,17 @@ function exportTXT() {
                 }
 				// =====================================================================
                 
-                textContent += `${"-".repeat(60)}\n`;
-                textContent += `Descripción: ${block.caption || 'Sin descripción'}\n\n`;
+                textContent.push(SEP_MAIN);
+                textContent.push(`Descripción: ${block.caption || 'Sin descripción'}`);
+                textContent.push('');
                 break;
             
             case 'ref':
                 if (block.refData) {
                     refCount++;
-                    const { author, title, source, year, url } = block.refData;
-                    textContent += `\n[${refCount}] `;
-                    
-                    if (block.refType === 'book') {
-                        textContent += `${author}, "${title}". ${source}, ${year}.`;
-                    } else if (block.refType === 'web') {
-                        textContent += `${author}, "${title}", ${source}, ${year}. [En línea]. Disponible: ${url}`;
-                    } else {
-                        textContent += `${author}, "${title}", ${source}, ${year}.`;
-                    }
-                    textContent += `\n`;
+                    const formattedRef = formatTXTReference(block.refData, block.refType, refCount);
+                    textContent.push(formattedRef);
+                    textContent.push('');
                 }
                 break;
             
@@ -946,56 +953,80 @@ function exportTXT() {
                     const headerBlock = reportData.find(b => b.type === 'header');
                     const studentName = headerBlock && headerBlock.hData ? headerBlock.hData.name : '[Nombre del estudiante]';
                     
-                    textContent += `\n${"=".repeat(60)}\n`;
-                    textContent += `DECLARACIÓN DE USO DE INTELIGENCIA ARTIFICIAL\n`;
-                    textContent += `${"=".repeat(60)}\n\n`;
+                    textContent.push('');
+                    textContent.push(SEP_MAIN);
+                    textContent.push(`DECLARACIÓN DE USO DE INTELIGENCIA ARTIFICIAL`);
+                    textContent.push(SEP_MAIN);
+                    textContent.push('');
                     
                     if (block.aiUsed === 'no') {
 						const declarantName = ai.name || studentName;
-						textContent += `Yo, ${declarantName}, declaro que NO he utilizado herramientas de\n`;
-                        textContent += `Inteligencia Artificial para la elaboración de este trabajo académico.\n\n`;
-                        textContent += `Afirmo que cuento con evidencias físicas y/o digitales que demuestran\n`;
-                        textContent += `mi autoría, incluyendo: documentos manuscritos, materiales impresos con\n`;
-                        textContent += `anotaciones o subrayado, historial de versiones de documentos electrónicos,\n`;
-                        textContent += `o commits en repositorios de código.\n\n`;
-                        textContent += `Reconozco que el profesor se reserva el derecho de solicitar dichas\n`;
-                        textContent += `evidencias cuando existan sospechas o se detecten conductas que atenten\n`;
-                        textContent += `contra la integridad académica.\n\n`;
+						textContent.push(`Yo, ${declarantName}, declaro que NO he utilizado herramientas de`);
+                        textContent.push(`Inteligencia Artificial para la elaboración de este trabajo académico.`);
+                        textContent.push(`Afirmo que cuento con evidencias físicas y/o digitales que demuestran`);
+                        textContent.push(`mi autoría, incluyendo: documentos manuscritos, materiales impresos con`);
+                        textContent.push(`anotaciones o subrayado, historial de versiones de documentos electrónicos,`);
+                        textContent.push(`o commits en repositorios de código.`);
+                        textContent.push('');
+                        textContent.push(`Reconozco que el profesor se reserva el derecho de solicitar dichas`);
+                        textContent.push(`evidencias cuando existan sospechas o se detecten conductas que atenten`);
+                        textContent.push(`contra la integridad académica.`);
                     } else {
                         const ai = block.aiData;
-                        textContent += `Estudiante: ${ai.name || studentName}\n`;
-                        textContent += `IA utilizada: ${ai.aiTool}\n`;
-                        textContent += `Fecha: ${ai.date}\n`;
-                        textContent += `Propósito: ${ai.purpose}\n\n`;
-                        textContent += `Prompt utilizado:\n`;
-                        textContent += `${"-".repeat(40)}\n`;
-                        textContent += `${ai.prompt}\n`;
-                        textContent += `${"-".repeat(40)}\n\n`;
+                        textContent.push(`Estudiante: ${ai.name || studentName}`);
+                        textContent.push(`IA utilizada: ${ai.aiTool}`);
+                        textContent.push(`Fecha: ${ai.date}`);
+                        textContent.push(`Propósito: ${ai.purpose}`);
+                        textContent.push('');
+                        textContent.push(`Prompt utilizado:`);
+                        textContent.push(SEP_SUB);
+                        textContent.push(`${ai.prompt}`);
+                        textContent.push(SEP_SUB);
+                        textContent.push('');
+
                         if (ai.attachments) {
-                            textContent += `Archivos suministrados: ${ai.attachments}\n\n`;
+                            textContent.push(`Archivos suministrados: ${ai.attachments}\n`);
                         }
-                        textContent += `Respuesta en crudo:\n`;
-                        textContent += `${"-".repeat(40)}\n`;
-                        textContent += `${ai.rawResponse}\n`;
-                        textContent += `${"-".repeat(40)}\n\n`;
+
+                        textContent.push(`Respuesta en crudo:`);
+                        textContent.push(SEP_SUB);
+                        textContent.push(`${ai.rawResponse}`);
+                        textContent.push(`${SEP_SUB}\n`);
                     }
                 }
                 break;
         }
     });
 
-    const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = "reporte_academico.txt";
-    link.click();
-    
-    setTimeout(() => URL.revokeObjectURL(link.href), 100);
+    downloadFile(textContent.join('\n'), 'reporte_academico.txt');
 }
 
 // ============================================================================
 // FUNCIONES AUXILIARES
 // ============================================================================
+
+/**
+ * Funciones para exportTXT
+ */
+function formatTXTReference(data, type, index) {
+    const base = `[${index}] ${data.author}, "${data.title}," ${data.source}, ${data.year}.`;
+    if (type === 'web') {
+        return `${base} [En línea]. Disponible: ${data.url}\n`;
+    }
+
+    return base;
+}
+
+function downloadFile(content, filename) {
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+
+    setTimeout(() => URL.revokeObjectURL(link.href), 100);
+}
 
 /**
  * Formatea una referencia según el estilo IEEE
