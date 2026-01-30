@@ -439,7 +439,6 @@ function renderTitleEditor(block, deleteBtn) {
  * Actualiza el nivel del subtítulo
  */
 function updateSubtitleLevel(blockId, level) {
-    console.log("Updating subtitle level:", blockId, level);
     const block = reportData.find(b => b.id === blockId);
     if (block) {
         block.headingLevel = level;
@@ -452,7 +451,6 @@ function updateSubtitleLevel(blockId, level) {
  * Renderiza el editor de subtítulo (AHORA SEGURO)
  */
 function renderSubtitleEditor(block, deleteBtn) {
-    console.log("Rendering subtitle editor for block:", block);
     return `
         <div class="block-card subtitle-card">
             ${deleteBtn}
