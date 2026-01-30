@@ -347,8 +347,9 @@ Dale una estrella en GitHub para apoyar el desarrollo.
 
 <div align="center">
 
-**Hecho por Jorge Pedrozo**
+**Hecho por [Jorge Pedrozo](https://github.com/JorgeTSW)**
 
-[Volver arriba](#generador-de-reportes-académicos)
+**Fork mantenido por [NejireSupremacy](https://github.com/NejireSupremacy)**
 
+[Volver arriba](#generador-de-reportes-academicos)
 </div>
