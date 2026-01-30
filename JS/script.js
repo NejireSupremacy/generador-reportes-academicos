@@ -668,7 +668,8 @@ function renderPreview() {
                 return `<${block.headingLevel} class="p-subtitle ${block.headingLevel}">${escapeHtml(block.content)}</${block.headingLevel}>`;
             
             case 'text':
-                return `<p class="p-text">${escapeHtml(block.content)}</p>`;
+                const textWithBreaks = escapeHtml(block.content).replace(/\n/g, '<br>');
+                return `<p class="p-text">${textWithBreaks}</p>`;
             
             case 'image':
                 figureCounter++;
