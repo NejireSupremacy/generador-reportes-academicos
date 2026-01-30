@@ -22,8 +22,12 @@
 - [ ] Mejorar el sistema de exportación en texto. Posiblemente reemplazando el formato actual por Markdown.
 - [ ] Implementar una función de "Importar" y "Exportar" el reporte completo. Posiblemente usando XML o Markdown.
 
+## Planes a Largo Plazo:
+- Mejorar la interfaz de usuario y experiencia (UI/UX).
+- Añadir más temas institucionales y no institucionales.
+
 ## Errores Conocidos:
-- [ ] El bloque de párrafo no parece permitir los saltos de línea.
+- [x] El bloque de párrafo no parece permitir los saltos de línea.
 
 ---
 
