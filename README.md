@@ -8,6 +8,14 @@
 
 ---
 
+## :warning: Nota sobre este Fork
+
+**Este es un fork divergente del proyecto original.** Este proyecto planea ser modificado significativamente con cambios que hacen que la mayoría del código sea diferente del original o tenga un enfoque distinto. 
+
+**No se planean hacer Pull Requests hacia el repositorio original.** Este fork se mantiene como un proyecto independiente con su propia dirección y desarrollo.
+
+---
+
 ## Descripción
 
 Aplicación web 100% cliente para generar documentos académicos profesionales con múltiples tipos de bloques: encabezados, títulos, párrafos, código, imágenes, **tablas**, referencias IEEE y **declaración de uso de IA**.
