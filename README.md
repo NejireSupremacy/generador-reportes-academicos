@@ -19,8 +19,9 @@
 ## Planes a Corto Plazo
 
 - [x] Implemnetar niveles de subtítulos (h2, h3, h4, h5).
-- [X] Implementar sistema de arrastrar y soltar bloques/reordenamiento.
-- [ ] Mejorar el sistema de exportación en texto. Posiblemente reemplazando el formato actual por Markdown.
+- [x] Implementar sistema de arrastrar y soltar bloques/reordenamiento.
+- [x] Mejorar el sistema de exportación en texto. ~~Posiblemente reemplazando el formato actual por Markdown.~~
+   - Se añadió soporte para exportar en TXT, PDF y XML. Se planea añadir más formatos en el futuro.
 - [ ] Implementar una función de "Importar" y "Exportar" el reporte completo. Posiblemente usando XML o Markdown.
 
 ## Planes a Largo Plazo
