@@ -71,15 +71,21 @@
             
             <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.2); margin: 15px 0;">
             
-            <button class="btn-save" onclick="exportTXT()">
-                <span class="material-symbols-outlined">save</span>
-                <span>&ensp;Guardar TXT</span>
-            </button>
-            
-            <button class="btn-print" onclick="window.print()">
-                <span class="material-symbols-outlined">picture_as_pdf</span>
-                <span>&ensp;Imprimir PDF</span>
-            </button>
+            <h3>Exportar</h3>
+
+            <div class="export-selector">
+                <label style="font-size: 0.85em; margin-bottom: 8px; display: block; opacity: 0.9;">Formato:</label>
+                <select id="exportFormatSelector" style="width: 100%; padding: 8px; border-radius: 5px; border: none; background: rgba(255,255,255,0.9); color: #333; cursor: pointer; margin-bottom: 15px;">
+                    <option value="pdf">PDF - Documento PDF</option>
+                    <option value="txt">TXT - Texto Plano</option>
+                    <option value="xml">XML - Lenguaje de Marcado Extensible</option>
+                </select>
+
+                <button class="btn-download" onclick="handleExport()">
+                    <span class="material-symbols-outlined">download</span>
+                    <span>&ensp;Descargar</span>
+                </button>
+            </div>
 
         <!-- Créditos -->
         <div class="credits">

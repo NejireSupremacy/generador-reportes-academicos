@@ -117,15 +117,22 @@ body {
     transform: translateX(5px) !important;
 }
 
-.btn-save,
-.btn-print {
-    background: var(--secondary) !important;
-    font-weight: 600;
+.btn-download {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
-.btn-save:hover,
-.btn-print:hover {
-    background: var(--accent) !important;
+.btn-download:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.6);
+}
+
+.export-selector {
+    margin-bottom: 15px;
 }
 
 /* Selector de tema */

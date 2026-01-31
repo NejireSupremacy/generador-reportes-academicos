@@ -1077,6 +1077,141 @@ function exportTXT() {
     downloadFile(textContent.join('\n'), 'reporte_academico.txt');
 }
 
+function handleExport() {
+    const format = document.getElementById('exportFormatSelector').value;
+
+    switch(format) {
+        case 'txt':
+            exportTXT();
+            break;
+        case 'pdf':
+            exportPDF();
+            break;
+        case 'xml':
+            exportXML();
+            break;
+        default:
+            alert('Formato de exportación no soportado.');
+    }
+}
+
+function exportPDF() {
+    window.print();
+}
+
+function exportXML() {
+    const xmlLines = [];
+    xmlLines.push('<?xml version="1.0" encoding="UTF-8"?>');
+    xmlLines.push('<reporte_academico>');
+    
+    reportData.forEach((block, index) => {
+        xmlLines.push(`  <bloque id="${block.id}" tipo="${block.type}" orden="${index + 1}">`);
+        
+        switch(block.type) {
+            case 'header':
+                if (block.hData) {
+                    xmlLines.push('    <encabezado>');
+                    xmlLines.push(`      <nombre>${escapeXml(block.hData.name)}</nombre>`);
+                    xmlLines.push(`      <grupo>${escapeXml(block.hData.group)}</grupo>`);
+                    xmlLines.push(`      <materia>${escapeXml(block.hData.subject)}</materia>`);
+                    xmlLines.push(`      <profesor>${escapeXml(block.hData.prof)}</profesor>`);
+                    xmlLines.push(`      <institucion>${escapeXml(block.hData.inst)}</institucion>`);
+                    xmlLines.push(`      <cuatrimestre>${escapeXml(block.hData.term)}</cuatrimestre>`);
+                    xmlLines.push(`      <fecha>${escapeXml(block.hData.date)}</fecha>`);
+                    xmlLines.push('    </encabezado>');
+                }
+                break;
+            
+            case 'title':
+                xmlLines.push(`    <titulo>${escapeXml(block.content)}</titulo>`);
+                break;
+            
+            case 'subtitle':
+                xmlLines.push(`    <subtitulo nivel="${block.headingLevel || 'h2'}">${escapeXml(block.content)}</subtitulo>`);
+                break;
+            
+            case 'text':
+                xmlLines.push(`    <parrafo>${escapeXml(block.content)}</parrafo>`);
+                break;
+            
+            case 'code':
+                xmlLines.push(`    <codigo><![CDATA[${block.content}]]></codigo>`);
+                break;
+            
+            case 'image':
+                xmlLines.push('    <imagen>');
+                xmlLines.push(`      <descripcion>${escapeXml(block.caption || '')}</descripcion>`);
+                xmlLines.push(`      <datos_base64><![CDATA[${block.content || ''}]]></datos_base64>`);
+                xmlLines.push('    </imagen>');
+                break;
+            
+            case 'table':
+                xmlLines.push(`    <tabla columnas="${block.columns || 3}">`);
+                xmlLines.push(`      <descripcion>${escapeXml(block.caption || '')}</descripcion>`);
+                xmlLines.push('      <datos>');
+                if (block.tableData) {
+                    block.tableData.forEach((row, rowIndex) => {
+                        const rowType = rowIndex === 0 ? 'encabezados' : 'fila';
+                        xmlLines.push(`        <${rowType}>`);
+                        row.forEach((cell, cellIndex) => {
+                            xmlLines.push(`          <celda columna="${cellIndex + 1}">${escapeXml(cell)}</celda>`);
+                        });
+                        xmlLines.push(`        </${rowType}>`);
+                    });
+                }
+                xmlLines.push('      </datos>');
+                xmlLines.push('    </tabla>');
+                break;
+            
+            case 'ref':
+                if (block.refData) {
+                    xmlLines.push(`    <referencia tipo="${block.refType}">`);
+                    xmlLines.push(`      <autor>${escapeXml(block.refData.author)}</autor>`);
+                    xmlLines.push(`      <titulo>${escapeXml(block.refData.title)}</titulo>`);
+                    xmlLines.push(`      <fuente>${escapeXml(block.refData.source)}</fuente>`);
+                    xmlLines.push(`      <anio>${escapeXml(block.refData.year)}</anio>`);
+                    if (block.refData.url) {
+                        xmlLines.push(`      <url>${escapeXml(block.refData.url)}</url>`);
+                    }
+                    xmlLines.push('    </referencia>');
+                }
+                break;
+            
+            case 'ai':
+                if (block.aiData) {
+                    xmlLines.push(`    <declaracion_ia uso="${block.aiUsed}">`);
+                    xmlLines.push(`      <nombre_estudiante>${escapeXml(block.aiData.name)}</nombre_estudiante>`);
+                    if (block.aiUsed === 'yes') {
+                        xmlLines.push(`      <herramienta_ia>${escapeXml(block.aiData.aiTool)}</herramienta_ia>`);
+                        xmlLines.push(`      <fecha>${escapeXml(block.aiData.date)}</fecha>`);
+                        xmlLines.push(`      <proposito>${escapeXml(block.aiData.purpose)}</proposito>`);
+                        xmlLines.push(`      <prompt><![CDATA[${block.aiData.prompt}]]></prompt>`);
+                        xmlLines.push(`      <archivos_adjuntos>${escapeXml(block.aiData.attachments)}</archivos_adjuntos>`);
+                        xmlLines.push(`      <respuesta_cruda><![CDATA[${block.aiData.rawResponse}]]></respuesta_cruda>`);
+                    }
+                    xmlLines.push('    </declaracion_ia>');
+                }
+                break;
+        }
+        
+        xmlLines.push('  </bloque>');
+    });
+    
+    xmlLines.push('</reporte_academico>');
+    
+    downloadFile(xmlLines.join('\n'), 'reporte_academico.xml', 'text/xml');
+}
+
+function escapeXml(unsafe) {
+    if (!unsafe) return '';
+    return String(unsafe)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;");
+}
+
 // ============================================================================
 // FUNCIONES AUXILIARES
 // ============================================================================
@@ -1093,8 +1228,8 @@ function formatTXTReference(data, type, index) {
     return base;
 }
 
-function downloadFile(content, filename) {
-    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+function downloadFile(content, filename, mimeType='text/plain;charset=utf-8') {
+    const blob = new Blob([content], { type: mimeType });
     const link = document.createElement('a');
 
     link.href = URL.createObjectURL(blob);
