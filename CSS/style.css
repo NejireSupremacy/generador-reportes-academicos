@@ -844,3 +844,62 @@ textarea.editor-input {
         min-width: 50px;
     }
 }
+
+/* ============================================================================
+   DRAG & DROP
+   ============================================================================ */
+/* Thanks Claude for this ngl */
+.block-card-container {
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.drag-handle {
+    position: absolute;
+    left: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: #ccc;
+    cursor: grab;
+    user-select: none;
+    opacity: 0;
+    transition: opacity 0.2s, color 0.2s;
+}
+
+.block-card-container:hover .drag-handle {
+    opacity: 1;
+}
+
+.drag-handle:hover {
+    color: var(--primary);
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.dragging {
+    opacity: 0.4;
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.drag-over {
+    border: 2px dashed var(--primary);
+    background: linear-gradient(to bottom, 
+        rgba(0, 184, 230, 0.1), 
+        rgba(0, 184, 230, 0.05));
+    transform: scale(1.02);
+}
+
+.drag-over::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 2px;
+}

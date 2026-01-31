@@ -342,6 +342,78 @@ function updateTableCaption(id, value) {
 }
 
 // ============================================================================
+// REORDENAMIENTO DE BLOQUES
+// ============================================================================
+function makeBlockDraggable(blockElement, blockId) {
+    blockElement.setAttribute('draggable', true);
+    blockElement.classList.add('draggable-block');
+    
+    // Event Listeners para drag and drop
+    blockElement.addEventListener('dragstart', handleDragStart);
+    blockElement.addEventListener('dragover', handleDragOver);
+    blockElement.addEventListener('dragleave', handleDragLeave);
+    blockElement.addEventListener('drop', handleDrop);
+    blockElement.addEventListener('dragend', handleDragEnd);
+}
+
+let draggedBlockId = null;
+
+function handleDragStart(e) {
+    draggedBlockId = parseInt(e.currentTarget.dataset.blockId);
+    e.currentTarget.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+}
+
+function handleDragOver(e) {
+    if (e.preventDefault) e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+
+    const target = e.currentTarget;
+    if (target.classList.contains('draggable-block')) {
+        target.classList.add('drag-over');
+    }
+
+    return false;
+}
+
+function handleDragLeave(e) {
+    const target = e.currentTarget;
+    target.classList.remove('drag-over');
+}
+
+function handleDrop(e) {
+    if (e.stopPropagation) e.stopPropagation();
+
+    e.currentTarget.classList.remove('drag-over');
+
+    const targetBlockId = parseInt(e.currentTarget.dataset.blockId);
+    if (draggedBlockId !== targetBlockId) {
+        reorderBlocks(draggedBlockId, targetBlockId);
+    }
+
+    return false;
+}
+
+function handleDragEnd(e) {
+    e.currentTarget.classList.remove('dragging');
+    document.querySelectorAll('.drag-over').forEach(el => {
+        el.classList.remove('drag-over');
+    });
+}
+
+function reorderBlocks(draggedId, targetId) {
+    const draggedIndex = reportData.findIndex(b => b.id === draggedId);
+    const targetIndex = reportData.findIndex(b => b.id === targetId);
+
+    if (draggedIndex === -1 || targetIndex === -1) return;
+
+    const [draggedBlock] = reportData.splice(draggedIndex, 1);
+    reportData.splice(targetIndex, 0, draggedBlock);
+
+    render();
+}
+
+// ============================================================================
 // FUNCIONES DE RENDERIZADO
 // ============================================================================
 
@@ -363,6 +435,7 @@ function renderEditor() {
     reportData.forEach(block => {
         const div = document.createElement('div');
         div.className = 'block-card-container';
+        div.dataset.blockId = block.id;
         
         const deleteBtn = `<button class="delete-btn" onclick="deleteBlock(${block.id})" title="Eliminar bloque">&times;</button>`;
         let blockHTML = "";
@@ -399,6 +472,8 @@ function renderEditor() {
 
         div.innerHTML = blockHTML;
         editor.appendChild(div);
+
+        makeBlockDraggable(div, block.id);
     });
 }
 
