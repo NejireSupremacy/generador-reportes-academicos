@@ -10,24 +10,29 @@
 
 ## :warning: Nota sobre este Fork
 
-**Este es un fork divergente del proyecto original.** Este proyecto planea ser modificado significativamente con cambios que hacen que la mayoría del código sea diferente del original o tenga un enfoque distinto. 
+**Este es un fork divergente del proyecto original.** Este proyecto planea ser modificado significativamente con cambios que hacen que la mayoría del código sea diferente del original o tenga un enfoque distinto.
 
 **No se planean hacer Pull Requests hacia el repositorio original.** Este fork se mantiene como un proyecto independiente con su propia dirección y desarrollo.
 
 ---
 
-## Planes a Corto Plazo:
+## Planes a Corto Plazo
+
 - [x] Implemnetar niveles de subtítulos (h2, h3, h4, h5).
-- [ ] Implementar sistema de arrastrar y soltar bloques/reordenamiento.
+- [X] Implementar sistema de arrastrar y soltar bloques/reordenamiento.
 - [ ] Mejorar el sistema de exportación en texto. Posiblemente reemplazando el formato actual por Markdown.
 - [ ] Implementar una función de "Importar" y "Exportar" el reporte completo. Posiblemente usando XML o Markdown.
 
-## Planes a Largo Plazo:
-- Mejorar la interfaz de usuario y experiencia (UI/UX).
-- Añadir más temas institucionales y no institucionales.
+## Planes a Largo Plazo
 
-## Errores Conocidos:
+- Añadir más temas institucionales y no institucionales.
+- Mejorar el rendimiento general de la aplicación.
+- Mejorar la interfaz de usuario y experiencia (UI/UX).
+
+## Errores Conocidos
+
 - [x] El bloque de párrafo no parece permitir los saltos de línea.
+- [ ] El render de la página puede ser lento con muchos bloques. Se planea refactorizar el render usando virtual DOM.
 
 ---
 
@@ -59,12 +64,15 @@ Aplicación web 100% cliente para generar documentos académicos profesionales c
 ### Interfaz Principal
 
 #### Tema 1
+
 ![Interfaz tema 1]( ./SCREENSHOTS/S1.png )
 
 #### Tema 2
+
 ![Interfaz tema 2]( ./SCREENSHOTS/S2.png )
 
 #### Tema 3
+
 ![Interfaz tema 3]( ./SCREENSHOTS/S3.png )
 
 ---
@@ -72,14 +80,17 @@ Aplicación web 100% cliente para generar documentos académicos profesionales c
 ## Temas Disponibles
 
 ### TSW - Tecnológico de Software
+
 - Azul Oscuro (#2C2E5C) + Cyan (#00B8E6)
 - Estilo moderno y tecnológico
 
 ### UPY - Universidad Politécnica de Yucatán
+
 - Morado (#5B1F8C) + Oro (#F5A623)
 - Elegante y distintivo
 
 ### UPP - Universidad Privada de la Península
+
 - Azul Fuerte (#0047AB) + Rojo (#E31E24)
 - Clásico y profesional
 
@@ -90,6 +101,7 @@ Aplicación web 100% cliente para generar documentos académicos profesionales c
 ### Opción 1: Uso Directo (Sin Instalación)
 
 1. Descarga el proyecto:
+
 ```bash
 git clone https://github.com/JorgeTSW/generador-reportes-academicos.git
 ```
@@ -107,10 +119,13 @@ Simplemente visita: [https://JorgeTSW.github.io/generador-reportes-academicos/](
 ## Uso Rápido
 
 ### 1. Seleccionar Tema
+
 Usa el selector en la parte superior de la barra lateral para elegir tu institución.
 
 ### 2. Agregar Bloques
+
 Click en los botones de la barra lateral:
+
 - **Encabezado** - Datos del estudiante
 - **Título** - Título del reporte
 - **Subtítulo** - Secciones
@@ -122,6 +137,7 @@ Click en los botones de la barra lateral:
 - **Declaración IA** - Declaración de uso de IA
 
 ### 3. Exportar
+
 - **Imprimir PDF** - Ctrl+P
 - **Guardar TXT** - Botón "Guardar TXT"
 
@@ -129,7 +145,8 @@ Click en los botones de la barra lateral:
 
 ## Sistema de Tablas
 
-### Características:
+### Características
+
 - **1 a 6 columnas** configurables
 - **Grid visual** tipo Excel
 - **Agregar/eliminar filas** dinámicamente
@@ -138,8 +155,9 @@ Click en los botones de la barra lateral:
 - **Word-wrap** en headers y contenido
 - **Estilo académico formal**
 
-### Ejemplo:
-```
+### Ejemplo
+
+```text
 Columnas: 3
 
 ┏━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┓
@@ -157,12 +175,14 @@ Tabla 1: Descripción de la tabla
 
 Sistema completo para cumplir con políticas de integridad académica.
 
-### Opción "NO usé IA":
+### Opción "NO usé IA"
+
 - Disclaimer automático
 - Campo de nombre individual (para equipos)
 - Compromiso documentado
 
-### Opción "SÍ usé IA":
+### Opción "SÍ usé IA"
+
 - Nombre del estudiante
 - IA utilizada (ChatGPT, Claude, Gemini, etc.)
 - Fecha de uso
@@ -175,23 +195,23 @@ Sistema completo para cumplir con políticas de integridad académica.
 
 ## Estructura del Proyecto
 
-```
+```text
 generador-reportes-academicos/
 ├── ASSETS
 │   └── favicon.png
 ├── Contributing.md
 ├── CSS
-│   └── style.css		# Estilos con temas
+│   └── style.css  # Estilos con temas
 ├── DOCS
-├── EXAMPLES			# Carpeta con ejemplos de documentos generados
+├── EXAMPLES   # Carpeta con ejemplos de documentos generados
 │   ├── EJEMPLO.pdf
 │   └── EJEMPLO.txt
-├── index.html			# Aplicación principal
+├── index.html   # Aplicación principal
 ├── JS
-│   └── script.js		# Lógica de la aplicación
+│   └── script.js  # Lógica de la aplicación
 ├── LICENSE
 ├── README.md
-└── SCREENSHOTS			# Carpeta con Screenshots
+└── SCREENSHOTS   # Carpeta con Screenshots
     ├── S1.png
     ├── S2.png
     └── S3.png
@@ -207,6 +227,7 @@ generador-reportes-academicos/
 - **LocalStorage** - Persistencia del tema
 
 ### Sin Dependencias Externas
+
 - Sin frameworks
 - Sin librerías
 - Sin npm
@@ -225,10 +246,12 @@ generador-reportes-academicos/
 
 ## Compatibilidad
 
-### Navegadores:
+### Navegadores
+
 - Chrome/Edge 90+
 
-### Dispositivos:
+### Dispositivos
+
 - Desktop (óptimo)
 - Tablet
 - Móvil (funcional, pero tiene bugs visuales)
@@ -237,13 +260,15 @@ generador-reportes-academicos/
 
 ## Casos de Uso
 
-### Académico:
+### Académico
+
 - Reportes de laboratorio
 - Tareas y trabajos
 - Proyectos finales
 - Investigaciones
 
-### Profesional:
+### Profesional
+
 - Documentación técnica
 - Reportes de análisis
 - Especificaciones
@@ -279,7 +304,7 @@ Si encuentras un bug o tienes una sugerencia:
 
 Este proyecto fue desarrollado con asistencia de herramientas de inteligencia artificial, conforme a las siguientes especificaciones:
 
-### Proceso de Desarrollo:
+### Proceso de Desarrollo
 
 1. **Estructura Básica (Sin IA)**
    - Idea original
@@ -301,7 +326,7 @@ Este proyecto fue desarrollado con asistencia de herramientas de inteligencia ar
    - Corrección de bugs visuales
    - Ajustes de impresión
 
-### Declaración del Autor:
+### Declaración del Autor
 
 **Todos los códigos generados por IA fueron exhaustivamente revisados, modificados y adaptados por el autor del proyecto.** El uso de IA fue como herramienta de asistencia en el desarrollo, manteniendo el control total sobre la arquitectura, decisiones de diseño y calidad del código final.
 
@@ -317,11 +342,17 @@ Este proyecto está bajo la Licencia MIT. Ver [LICENSE](LICENSE) para más detal
 
 ## Autor
 
-**Jorge Javier Pedrozo Romero**
+### Jorge Javier Pedrozo Romero
 
 - GitHub: [@JorgeTSW](https://github.com/JorgeTSW)
-- Email: jorge.pedroza@tecdesoftware.edu.mx
+- Email: <jorge.pedroza@tecdesoftware.edu.mx>
 - Institución: Tecnológico de Software
+
+## Fork Mantenido por
+
+### NejireSupremacy
+
+- GitHub: [@NejireSupremacy](https://github.com/NejireSupremacy)
 
 ---
 
@@ -346,14 +377,3 @@ Este proyecto está bajo la Licencia MIT. Ver [LICENSE](LICENSE) para más detal
 Dale una estrella en GitHub para apoyar el desarrollo.
 
 **Compártelo con tus compañeros.**
-
----
-
-<div align="center">
-
-**Hecho por [Jorge Pedrozo](https://github.com/JorgeTSW)**
-
-**Fork mantenido por [NejireSupremacy](https://github.com/NejireSupremacy)**
-
-[Volver arriba](#generador-de-reportes-academicos)
-</div>
