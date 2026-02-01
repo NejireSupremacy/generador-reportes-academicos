@@ -1202,6 +1202,202 @@ function exportXML() {
     downloadFile(xmlLines.join('\n'), 'reporte_academico.xml', 'text/xml');
 }
 
+function handleImportXML(fileInput) {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const xmlContent = e.target.result;
+            importXMLContent(xmlContent);
+
+            const statusDiv = document.getElementById('importStatus');
+            statusDiv.textContent = 'Archivo importado correctamente';
+            statusDiv.style.display = 'block';
+
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 3000)
+
+            fileInput.value = '';
+        } catch (e) {
+            alert('Error al importar el archivo XML: ' + e.message);
+            fileInput.value = '';
+        }
+    };
+
+    reader.readAsText(file);
+}
+
+function importXMLContent(xmlString) {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
+
+    if (xmlDoc.getElementsByTagName('parsererror').length > 0) {
+        throw new Error("El archivo XML no es válido.");
+    }
+
+    const reportElement = xmlDoc.getElementsByTagName('reporte_academico')[0];
+    if (!reportElement) {
+        throw new Error('El archivo XML no contiene un reporte académico válido.');
+    }
+
+    reportData = [];
+
+    const blocks = reportElement.getElementsByTagName('bloque');
+    for (let i = 0; i < blocks.length; i++) {
+        const bloqueEl = blocks[i];
+        const blockType = bloqueEl.getAttribute('tipo');
+        const id = parseInt(bloqueEl.getAttribute('id')) || Date.now() + i;
+
+        let block = { id, type: blockType };
+
+        try {
+            switch(blockType) {
+                case 'header':
+                    block = parseHeaderBlock(bloqueEl, block);
+                    break;
+                case 'title':
+                    block.content = getElementText(bloqueEl, 'titulo');
+                    break;
+                case 'subtitle':
+                    block.content = getElementText(bloqueEl, 'subtitulo');
+                    block.headingLevel = bloqueEl.querySelector('subtitulo')?.getAttribute('nivel') || 'h2';
+                    break;
+                case 'text':
+                    block.content = getElementText(bloqueEl, 'parrafo');
+                    break;
+                case 'code':
+                    block.content = getElementText(bloqueEl, 'codigo');
+                    break;
+                case 'image':
+                    block = parseImageBlock(bloqueEl, block);
+                    break;
+                case 'table':
+                    block = parseTableBlock(bloqueEl, block);
+                    break;
+                case 'ref':
+                    block = parseRefBlock(bloqueEl, block);
+                    break;
+                case 'ai':
+                    block = parseAIBlock(bloqueEl, block);
+                    break;
+                default:
+                    console.warn(`Tipo de bloque desconocido: ${type}`);
+                    continue;
+            }
+            
+            reportData.push(block);
+        } catch (error) {
+            console.error(`Error procesando bloque ${type}:`, error);
+        }
+
+        renderEditor();
+        renderPreview();
+    }
+}
+
+function getElementText(parent, tagName) {
+    const element = parent.querySelector(tagName);
+    return element ? (element.textContent || '') : '';
+}
+
+function parseHeaderBlock(bloqueElement, block) {
+    const encabezado = bloqueElement.querySelector('encabezado');
+    if (!encabezado) return block;
+    
+    block.hData = {
+        name: getElementText(encabezado, 'nombre'),
+        group: getElementText(encabezado, 'grupo'),
+        subject: getElementText(encabezado, 'materia'),
+        prof: getElementText(encabezado, 'profesor'),
+        inst: getElementText(encabezado, 'institucion'),
+        term: getElementText(encabezado, 'cuatrimestre'),
+        date: getElementText(encabezado, 'fecha')
+    };
+    return block;
+}
+
+function parseImageBlock(bloqueElement, block) {
+    const imagen = bloqueElement.querySelector('imagen');
+    if (!imagen) return block;
+    
+    block.caption = getElementText(imagen, 'descripcion');
+    block.content = getElementText(imagen, 'datos_base64');
+    return block;
+}
+
+function parseTableBlock(bloqueElement, block) {
+    const tabla = bloqueElement.querySelector('tabla');
+    if (!tabla) return block;
+    
+    block.caption = getElementText(tabla, 'descripcion');
+    block.columns = parseInt(tabla.getAttribute('columnas')) || 3;
+    block.tableData = [];
+    
+    const datos = tabla.querySelector('datos');
+    if (datos) {
+        const encabezados = datos.querySelector('encabezados');
+        if (encabezados) {
+            const row = [];
+            const celdas = encabezados.querySelectorAll('celda');
+            celdas.forEach(celda => {
+                row.push(celda.textContent || '');
+            });
+            if (row.length > 0) {
+                block.tableData.push(row);
+            }
+        }
+        
+        const filas = datos.querySelectorAll('fila');
+        filas.forEach(fila => {
+            const row = [];
+            const celdas = fila.querySelectorAll('celda');
+            celdas.forEach(celda => {
+                row.push(celda.textContent || '');
+            });
+            if (row.length > 0) {
+                block.tableData.push(row);
+            }
+        });
+    }
+    
+    return block;
+}
+
+function parseRefBlock(bloqueElement, block) {
+    const referencia = bloqueElement.querySelector('referencia');
+    if (!referencia) return block;
+    
+    block.refType = referencia.getAttribute('tipo') || 'web';
+    block.refData = {
+        author: getElementText(referencia, 'autor'),
+        title: getElementText(referencia, 'titulo'),
+        source: getElementText(referencia, 'fuente'),
+        year: getElementText(referencia, 'anio'),
+        url: getElementText(referencia, 'url')
+    };
+    return block;
+}
+
+function parseAIBlock(bloqueElement, block) {
+    const declaracion = bloqueElement.querySelector('declaracion_ia');
+    if (!declaracion) return block;
+    
+    block.aiUsed = declaracion.getAttribute('uso') || 'no';
+    block.aiData = {
+        name: getElementText(declaracion, 'nombre_estudiante'),
+        aiTool: getElementText(declaracion, 'herramienta_ia'),
+        date: getElementText(declaracion, 'fecha'),
+        purpose: getElementText(declaracion, 'proposito'),
+        prompt: getElementText(declaracion, 'prompt'),
+        attachments: getElementText(declaracion, 'archivos_adjuntos'),
+        rawResponse: getElementText(declaracion, 'respuesta_cruda')
+    };
+    return block;
+}
+
 function escapeXml(unsafe) {
     if (!unsafe) return '';
     return String(unsafe)

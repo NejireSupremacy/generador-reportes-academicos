@@ -21,8 +21,9 @@
 - [x] Implemnetar niveles de subtítulos (h2, h3, h4, h5).
 - [x] Implementar sistema de arrastrar y soltar bloques/reordenamiento.
 - [x] Mejorar el sistema de exportación en texto. ~~Posiblemente reemplazando el formato actual por Markdown.~~
-   - Se añadió soporte para exportar en TXT, PDF y XML. Se planea añadir más formatos en el futuro.
-- [ ] Implementar una función de "Importar" y "Exportar" el reporte completo. Posiblemente usando XML o Markdown.
+  - Se añadió soporte para exportar en TXT, PDF y XML. Se planea añadir más formatos en el futuro.
+- [x] Implementar una función de "Importar" y "Exportar" el reporte completo. Posiblemente usando XML~~ o Markdown~~.
+  - Se terminó usando XML para la importación y exportación completa del reporte. Esto gracias a su estructura jerárquica y capacidad para representar múltiples tipos de bloques con atributos.
 
 ## Planes a Largo Plazo
 

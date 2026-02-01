@@ -70,6 +70,17 @@
             </button>
             
             <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.2); margin: 15px 0;">
+
+            <h3>Importar</h3>
+
+            <button class="btn-import" onclick="document.getElementById('xmlFileInput').click()" style="width: 100%; padding: 10px; border-radius: 5px; border: none; background: rgba(100, 200, 255, 0.8); color: white; cursor: pointer; margin-bottom: 15px; font-weight: bold;">
+                <span class="material-symbols-outlined">upload</span>
+                <span>&ensp;Importar XML</span>
+            </button>
+
+            <input type="file" id="xmlFileInput" accept=".xml" style="display: none;" onchange="handleImportXML(this)">
+
+            <div id="importStatus" style="font-size: 0.8em; color: #90EE90; display: none; margin-top: 10px; text-align: center;"></div>
             
             <h3>Exportar</h3>
 
