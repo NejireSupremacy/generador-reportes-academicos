@@ -22,7 +22,7 @@
 - [x] Implementar sistema de arrastrar y soltar bloques/reordenamiento.
 - [x] Mejorar el sistema de exportación en texto. ~~Posiblemente reemplazando el formato actual por Markdown.~~
   - Se añadió soporte para exportar en TXT, PDF y XML. Se planea añadir más formatos en el futuro.
-- [x] Implementar una función de "Importar" y "Exportar" el reporte completo. Posiblemente usando XML~~ o Markdown~~.
+- [x] Implementar una función de "Importar" y "Exportar" el reporte completo. Posiblemente usando XML ~~o Markdown~~.
   - Se terminó usando XML para la importación y exportación completa del reporte. Esto gracias a su estructura jerárquica y capacidad para representar múltiples tipos de bloques con atributos.
 - [ ] Permitir el uso de Markdown dentro de los bloques de párrafo.
   - Esto rompe con la ideología de "no dependencias externas", pero se consideró que la funcionalidad supera las desventajas.
