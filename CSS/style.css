@@ -22,7 +22,7 @@ body[data-theme="upy"] {
     --secondary: #F5A623;      /* Oro/Naranja del BIS */
     --accent: #e3bef7;         /* Lila claro */
     --dark: #1a1a1a;
-    --light: #f5f7fa;
+    --light: #f5f7fa;   
 }
 
 /* Tema UPP - Universidad Politécnica de Puebla */
@@ -69,6 +69,8 @@ body {
     gap: 8px;
     box-shadow: 2px 0 10px rgba(0,0,0,0.1);
     transition: background 0.3s ease;
+    height: 100%;
+    overflow-y: auto;
 }
 
 .toolbox h3 {
