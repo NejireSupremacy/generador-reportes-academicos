@@ -101,6 +101,8 @@ function addBlock(type) {
 
     if (type === 'subtitle') {
         newBlock.headingLevel = "h2";
+        newBlock.isItalic = false;
+        newBlock.showLine = true;
     }
     
     reportData.push(newBlock);
@@ -523,9 +525,34 @@ function updateSubtitleLevel(blockId, level) {
 }
 
 /**
+ * Actualiza si el subtítulo va en itálicas
+ */
+function updateSubtitleItalic(blockId, isItalic) {
+    const block = reportData.find(b => b.id === blockId);
+    if (block) {
+        block.isItalic = !!isItalic;
+        renderPreview();
+    }
+}
+
+/**
+ * Actualiza si el subtítulo muestra línea inferior
+ */
+function updateSubtitleLine(blockId, showLine) {
+    const block = reportData.find(b => b.id === blockId);
+    if (block) {
+        block.showLine = !!showLine;
+        renderPreview();
+    }
+}
+
+/**
  * Renderiza el editor de subtítulo (AHORA SEGURO)
  */
 function renderSubtitleEditor(block, deleteBtn) {
+    const isItalic = block.isItalic === true;
+    const showLine = block.showLine !== false;
+
     return `
         <div class="block-card subtitle-card">
             ${deleteBtn}
@@ -538,6 +565,15 @@ function renderSubtitleEditor(block, deleteBtn) {
                     <option value="h4" ${block.headingLevel === 'h4' ? 'selected' : ''}>H4</option>
                     <option value="h5" ${block.headingLevel === 'h5' ? 'selected' : ''}>H5</option>
                 </select>
+
+                <div class="subtitle-options" style="margin-top: 10px; display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
+                    <label style="display: flex; align-items: center; gap: 6px; font-size: 0.9em; color: #555;">
+                        <input type="checkbox" ${isItalic ? 'checked' : ''} onchange="updateSubtitleItalic(${block.id}, this.checked)"> Itálicas
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 6px; font-size: 0.9em; color: #555;">
+                        <input type="checkbox" ${showLine ? 'checked' : ''} onchange="updateSubtitleLine(${block.id}, this.checked)"> Línea inferior
+                    </label>
+                </div>
             </div>
         </div>`;
 }
@@ -740,7 +776,11 @@ function renderPreview() {
                 return `<h1 class="p-title">${escapeHtml(block.content)}</h1>`;
             
             case 'subtitle':
-                return `<${block.headingLevel} class="p-subtitle ${block.headingLevel}">${escapeHtml(block.content)}</${block.headingLevel}>`;
+                const subtitleClasses = ['p-subtitle', block.headingLevel];
+                if (block.isItalic === true) subtitleClasses.push('is-italic');
+                if (block.showLine === false) subtitleClasses.push('no-underline');
+
+                return `<${block.headingLevel} class="${subtitleClasses.join(' ')}">${escapeHtml(block.content)}</${block.headingLevel}>`;
             
             case 'text':
                 const textWithBreaks = escapeHtml(block.content).replace(/\n/g, '<br>');
@@ -1127,7 +1167,7 @@ function exportXML() {
                 break;
             
             case 'subtitle':
-                xmlLines.push(`    <subtitulo nivel="${block.headingLevel || 'h2'}">${escapeXml(block.content)}</subtitulo>`);
+                xmlLines.push(`    <subtitulo nivel="${block.headingLevel || 'h2'}" italica="${block.isItalic ? 'true' : 'false'}" linea="${block.showLine === false ? 'false' : 'true'}">${escapeXml(block.content)}</subtitulo>`);
                 break;
             
             case 'text':
@@ -1263,7 +1303,14 @@ function importXMLContent(xmlString) {
                     break;
                 case 'subtitle':
                     block.content = getElementText(bloqueEl, 'subtitulo');
-                    block.headingLevel = bloqueEl.querySelector('subtitulo')?.getAttribute('nivel') || 'h2';
+                    
+                    const subtituloEl = bloqueEl.querySelector('subtitulo');
+                    const italicaAttr = subtituloEl?.getAttribute('italica');
+                    const lineaAttr = subtituloEl?.getAttribute('linea');
+                    
+                    block.headingLevel = subtituloEl?.getAttribute('nivel') || 'h2';
+                    block.isItalic = italicaAttr === 'true';
+                    block.showLine = lineaAttr === null ? true : lineaAttr !== 'false';
                     break;
                 case 'text':
                     block.content = getElementText(bloqueEl, 'parrafo');

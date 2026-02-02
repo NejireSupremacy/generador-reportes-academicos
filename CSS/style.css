@@ -520,6 +520,15 @@ textarea.editor-input {
     font-weight: 600;
 }
 
+.p-subtitle.is-italic {
+    font-style: italic;
+}
+
+.p-subtitle.no-underline {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
 .p-text { 
     text-align: justify; 
     margin-bottom: 16px;
