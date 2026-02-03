@@ -43,6 +43,7 @@
 
 - [x] El bloque de párrafo no parece permitir los saltos de línea.
 - [x] Si la pantalla es muy pequeña la barra lateral puede mostrar errores visuales.
+- [x] El tamaño de letra en las tablas puede ser muy pequeño a la hora de imprimir.
 - [ ] El render de la página puede ser lento con muchos bloques. Se planea refactorizar el render usando virtual DOM.
 
 ---
