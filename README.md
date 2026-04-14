@@ -28,6 +28,10 @@
 
 ## Planes
 
+### v1.0.4 - Cambios Recientes
+
+- **Arreglado:** Generación de PDF con espacios en blanco grandes en documentos con múltiples imágenes y subtítulos. Se modificaron las reglas de `page-break` en CSS para permitir saltos de página naturales.
+
 ### Planes Actuales
 
 - [ ] Permitir el uso de Markdown dentro de los bloques de párrafo.
@@ -44,6 +48,7 @@
 - [x] El bloque de párrafo no parece permitir los saltos de línea.
 - [x] Si la pantalla es muy pequeña la barra lateral puede mostrar errores visuales.
 - [x] El tamaño de letra en las tablas puede ser muy pequeño a la hora de imprimir.
+- [x] Generación de PDF con espacios en blanco grandes en documentos con múltiples imágenes y subtítulos. (Arreglado en v1.0.4)
 - [ ] El render de la página puede ser lento con muchos bloques. Se planea refactorizar el render usando virtual DOM.
 
 ---

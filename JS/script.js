@@ -1037,14 +1037,14 @@ function exportTXT() {
                                 const content = cellLines[col][l] || ''; // Si no hay más texto en esta col, celda vacía
                                 line += pad(content, colWidths[col]) + ' | ';
                             }
-                            textContent += line + '\n';
+                            textContent.push(line);
                         }
 
                         let separator = '+-';
                         for (let col = 0; col < cols; col++) {
                             separator += '-'.repeat(colWidths[col]) + '-+-';
                         }
-                        textContent += separator + '\n';
+                        textContent.push(separator);
                     }
                 }
 				// =====================================================================

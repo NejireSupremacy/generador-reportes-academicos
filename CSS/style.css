@@ -751,10 +751,29 @@ textarea.editor-input {
 
 	/* ============================== */
 
-    .p-title,
+    /* Allow page breaks after titles and subtitles to avoid large blank spaces */
+    .p-title {
+        page-break-after: auto !important;
+        break-after: auto !important;
+        page-break-inside: auto !important;
+        break-inside: auto !important;
+    }
+
     .p-subtitle {
-        page-break-after: avoid;
-        break-after: avoid;
+        page-break-after: auto !important;
+        break-after: auto !important;
+        page-break-inside: auto !important;
+        break-inside: auto !important;
+        page-break-before: auto !important;
+        break-before: auto !important;
+    }
+
+    /* Ensure images don't create awkward page breaks */
+    .preview-image-container {
+        page-break-before: auto !important;
+        break-before: auto !important;
+        page-break-after: auto !important;
+        break-after: auto !important;
     }
 
     .preview-image-container img {
